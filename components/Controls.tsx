@@ -142,7 +142,7 @@ export function Controls({
             name='maxDelayValue'
             label='Max Delay'
             min={0}
-            max={4}
+            max={20}
             step={0.1}
             value={maxDelayValue}
             onChange={setMaxDelayValue}
