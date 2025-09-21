@@ -1,8 +1,37 @@
 'use client';
 
 import { useAudioDevices } from '@speechmatics/browser-audio-input-react';
+import { useEffect, useState } from 'react';
 
 export function MicrophoneSelect({ disabled, defaultDeviceId }: { disabled?: boolean; defaultDeviceId?: string }) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <label>
+        Loading microphones
+        <select aria-busy="true" disabled />
+      </label>
+    );
+  }
+
+  if (typeof navigator === 'undefined' || !navigator.mediaDevices) {
+    return (
+      <label>
+        Microphone not supported in this environment
+        <select disabled />
+      </label>
+    );
+  }
+
+  return <MicrophoneSelectInner disabled={disabled} defaultDeviceId={defaultDeviceId} />;
+}
+
+function MicrophoneSelectInner({ disabled, defaultDeviceId }: { disabled?: boolean; defaultDeviceId?: string }) {
   const devices = useAudioDevices();
 
   switch (devices.permissionState) {
